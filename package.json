@@ -1,0 +1,16 @@
+{
+  "name": "hapi-jolocom-plugin",
+  "version": "0.1.0",
+  "description": "HAPI plugin for the Jolocom SDK",
+  "author": "Jolocom",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/hapi": "^18.0.3",
+    "@types/node": "^13.9.8",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "hapi": "^18.1.0"
+  }
+}
