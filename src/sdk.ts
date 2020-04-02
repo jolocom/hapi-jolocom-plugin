@@ -1,8 +1,18 @@
+import * as hapi from "hapi";
+import { JolocomSDK } from "jolocom-sdk";
 
-export const sdkPlugin = {
-    name: 'Jolocom SDK Plugin',
-    version: '0.1.0',
-    register: async (server, { store: Buffer }, next) => {
-        
-    }
-}
+export type SDKOptions = {
+  mnemonic: string;
+};
+
+export const sdkPlugin: hapi.Plugin<SDKOptions> = {
+  name: "hapiJolocomSDK",
+  version: "0.1.0",
+  requirements: {
+    node: "10",
+  },
+  register: async (server: hapi.Server, options) => {
+    const sdk = await JolocomSDK.fromMnemonic(options.mnemonic);
+    server.expose("sdk", sdk);
+  },
+};
