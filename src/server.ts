@@ -1,8 +1,20 @@
 import * as hapi from "hapi";
+import { sdkPlugin } from "./sdk";
+// import { verifierPlugin } from "./verifier";
 
-export const init = async() => {
-    const server = new hapi.Server({
-        host: 'localhost',
-        port: process.env.PUBLIC_PORT || 8000,
-    })
-}
+export const init = async () => {
+  const server = new hapi.Server({
+    host: "localhost",
+    port: process.env.PUBLIC_PORT || 8000,
+  });
+
+  await server.register({
+    plugin: sdkPlugin,
+    options: {
+      mnemonic:
+        "remain cook bonus salad stand tenant shove outdoor scheme cigar tape where",
+    },
+  });
+
+  await server.start();
+};
