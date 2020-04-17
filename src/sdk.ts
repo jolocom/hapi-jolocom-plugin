@@ -1,9 +1,7 @@
 import * as hapi from "hapi";
 import { JolocomSDK } from "jolocom-sdk";
+import { SDKOptions } from "./types";
 
-export type SDKOptions = {
-  mnemonic: string;
-};
 
 export const sdkPlugin: hapi.Plugin<SDKOptions> = {
   name: "hapiJolocomSDK",
