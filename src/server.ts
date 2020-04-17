@@ -13,6 +13,18 @@ export const init = async () => {
     options: {
       mnemonic:
         "remain cook bonus salad stand tenant shove outdoor scheme cigar tape where",
+      verifierOptions: [
+        {
+          name: "my_route",
+          requirements: [
+            {
+              type: ["email"],
+              constraints: [],
+            },
+          ],
+          onValid: async (token: string) => console.log(token),
+        },
+      ],
     },
   });
 

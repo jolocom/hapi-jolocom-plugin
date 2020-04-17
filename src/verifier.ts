@@ -1,8 +1,7 @@
-import * as hapi from "hapi";
-import { JolocomSDK } from "jolocom-sdk";
+import { Plugin } from "hapi";
 import { VerifierOptions } from "./types";
 
-export const verifierPlugin: hapi.Plugin<VerifierOptions> = {
+export const verifierPlugin: Plugin<VerifierOptions> = {
   name: "jolocom-verifier-plugin",
   version: "0.1.0",
   requirements: {
