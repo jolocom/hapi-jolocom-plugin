@@ -1,6 +1,5 @@
 import * as hapi from "hapi";
 import { sdkPlugin } from "./sdk";
-// import { verifierPlugin } from "./verifier";
 
 export const init = async () => {
   const server = new hapi.Server({

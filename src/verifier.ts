@@ -9,14 +9,32 @@ export const verifierPlugin: Plugin<VerifierOptions> = {
   },
   dependencies: "hapiJolocomSDK",
   register: async (server, options) => {
+    const path = `/${options.name || options.requirements[0].type[1]}/`;
+
     server.route({
       method: "GET",
-      path: "henlo",
-      handler: async () =>
+      path,
+      handler: async (request, h) => {
+        const callbackURL = request.url;
+        console.log(callbackURL);
+        return await h.context.identity.credRequestToken({
+          callbackURL,
+          credentialRequirements: options.requirements,
+        });
+      },
+    });
+
+    server.route({
+      method: "POST",
+      path,
+      handler: async (request, h) => {
         // @ts-ignore
-        await server.plugins.hapiJolocomSDK.sdk
-          .credRequestToken(options.requirements)
-          .then((t) => t.encode()),
+        const token = request.payload.token;
+        console.log(token);
+        const res = h.context.identity.tokenReceived(token);
+
+        if (res) options.onValid(token);
+      },
     });
   },
 };
