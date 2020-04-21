@@ -1,7 +1,6 @@
-import { Plugin, Server } from "hapi";
+import { Plugin, Server, Request, ResponseToolkit, Lifecycle } from "hapi";
 import { JolocomSDK } from "jolocom-sdk";
-import { SDKOptions } from "./types";
-import { verifierPlugin } from "./verifier";
+import { SDKOptions, VerifierOptions } from "./types";
 
 export const sdkPlugin: Plugin<SDKOptions> = {
   name: "hapiJolocomSDK",
@@ -9,7 +8,7 @@ export const sdkPlugin: Plugin<SDKOptions> = {
   requirements: {
     node: "10",
   },
-  register: async (server: Server, options) => {
+  register: async (server: Server, options: SDKOptions) => {
     const identity = await JolocomSDK.fromMnemonic(options.mnemonic);
 
     const bind = {

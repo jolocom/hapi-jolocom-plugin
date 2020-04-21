@@ -3,12 +3,13 @@ import { JolocomSDK, CredentialRequirements } from "jolocom-sdk";
 export type VerifierOptions = {
   name?: string;
   requirements: CredentialRequirements[];
-  onValid: (tokens: string) => Promise<any>;
+  integration: string;
 };
 
 export type SDKOptions = {
   mnemonic: string;
-  verifierOptions: VerifierOptions[];
+  verifierOptions?: VerifierOptions[];
+  issuerOptions?: never[];
   prefix?: string;
 };
 

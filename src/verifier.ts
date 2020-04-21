@@ -9,14 +9,15 @@ export const verifierPlugin: Plugin<VerifierOptions> = {
   },
   dependencies: "hapiJolocomSDK",
   register: async (server, options) => {
-    const path = `/${options.name || options.requirements[0].type[1]}/`;
-
+    const path = `/${options.name || options.requirements[0].type[0]}/`;
+    console.log(path);
     server.route({
       method: "GET",
       path,
       handler: async (request, h) => {
         const callbackURL = request.url;
         console.log(callbackURL);
+        console.log(h.context);
         return await h.context.identity.credRequestToken({
           callbackURL,
           credentialRequirements: options.requirements,

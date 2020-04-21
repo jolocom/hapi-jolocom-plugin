@@ -1,5 +1,6 @@
 import * as hapi from "hapi";
 import { sdkPlugin } from "./sdk";
+import { SDKOptions } from "./types";
 
 export const init = async () => {
   const server = new hapi.Server({
@@ -29,3 +30,5 @@ export const init = async () => {
 
   await server.start();
 };
+
+init();
