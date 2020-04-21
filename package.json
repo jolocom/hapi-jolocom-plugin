@@ -9,11 +9,12 @@
     "@types/hapi": "^18.0.3",
     "@types/node": "^13.9.8",
     "prettier": "^2.0.2",
+    "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "hapi": "^18.1.0",
-    "jolocom-sdk": "^0.3.3",
+    "jolocom-sdk": "^0.4.1",
     "tslib": "^1.11.1"
   }
 }

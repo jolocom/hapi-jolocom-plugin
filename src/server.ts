@@ -1,6 +1,7 @@
 import * as hapi from "hapi";
 import { sdkPlugin } from "./sdk";
 import { SDKOptions } from "./types";
+import config from "../config.example.json";
 
 export const init = async () => {
   const server = new hapi.Server({
@@ -10,22 +11,7 @@ export const init = async () => {
 
   await server.register({
     plugin: sdkPlugin,
-    options: {
-      mnemonic:
-        "remain cook bonus salad stand tenant shove outdoor scheme cigar tape where",
-      verifierOptions: [
-        {
-          name: "my_route",
-          requirements: [
-            {
-              type: ["email"],
-              constraints: [],
-            },
-          ],
-          onValid: async (token: string) => console.log(token),
-        },
-      ],
-    },
+    options: (config as unknown) as SDKOptions,
   });
 
   await server.start();
