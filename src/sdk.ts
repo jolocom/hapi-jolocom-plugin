@@ -39,6 +39,33 @@ export const sdkPlugin: Plugin<SDKOptions> = {
           },
         });
       });
+
+    if (options.issuerOptions)
+      options.issuerOptions.map((opts) => {
+        const path = `/${opts.name || opts.offers[0].type[1]}`;
+        server.route({
+          method: "GET",
+          path,
+          handler: issuanceRequestHandler,
+          options: {
+            bind: {
+              identity,
+              offers: opts.offers,
+            },
+          },
+        });
+        server.route({
+          method: "POST",
+          path,
+          handler: issuanceResponseHandler,
+          options: {
+            bind: {
+              identity,
+              offers: opts.offers,
+            },
+          },
+        });
+      });
   },
 };
 
@@ -60,7 +87,31 @@ async function verificationResponseHandler(
   const p = request.payload as { token: string };
   if (!p.token) return false;
 
-  const token: string = p.token;
-  const res = await h.context.identity.tokenReceived(token);
+  const res = await h.context.identity.tokenReceived(p.token);
+  // TODO POST cred info to integration endpoint
   return res;
+}
+
+async function offerRequestHandler(request: Request, h: ResponseToolkit) {
+  const callbackUrl = request.url.href;
+  return await h.context.identiy.credOfferToken({
+    callbackUrl,
+    offeredCredentials: h.context.offers,
+  });
+}
+
+async function offerResponseHandler(request: Request, h: ResponseToolkit) {
+  const p = request.payload as { token: string };
+  if (!p.token) return false;
+
+  const res = await h.context.identity.tokenReceived(p.token);
+  if (res)
+    return h.context.identity.credIssuanceToken(
+      {
+        signedCredentials: h.context.creds,
+      },
+      token
+    );
+
+  return false;
 }

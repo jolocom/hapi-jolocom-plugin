@@ -1,4 +1,8 @@
-import { JolocomSDK, CredentialRequirements } from "jolocom-sdk";
+import {
+  JolocomSDK,
+  CredentialRequirements,
+  CredentialOffer,
+} from "jolocom-sdk";
 
 export type VerifierOptions = {
   name?: string;
@@ -6,10 +10,16 @@ export type VerifierOptions = {
   integration: string;
 };
 
+export type IssuerOptions = {
+  name?: string;
+  offers: CredentialOffer[];
+  creds: CredentialDefinition[]:
+};
+
 export type SDKOptions = {
   mnemonic: string;
   verifierOptions?: VerifierOptions[];
-  issuerOptions?: never[];
+  issuerOptions?: IssuerOptions[];
   prefix?: string;
 };
 
