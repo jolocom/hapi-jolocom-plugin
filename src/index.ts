@@ -2,6 +2,8 @@ import { Plugin, Server, Request, ResponseToolkit, Lifecycle } from "hapi";
 import { JolocomSDK } from "jolocom-sdk";
 import { SDKOptions, VerifierOptions } from "./types";
 
+export { SDKOptions };
+
 export const sdkPlugin: Plugin<SDKOptions> = {
   name: "hapiJolocomSDK",
   version: "0.1.0",
@@ -46,7 +48,7 @@ export const sdkPlugin: Plugin<SDKOptions> = {
         server.route({
           method: "GET",
           path,
-          handler: issuanceRequestHandler,
+          handler: offerRequestHandler,
           options: {
             bind: {
               identity,
@@ -57,7 +59,7 @@ export const sdkPlugin: Plugin<SDKOptions> = {
         server.route({
           method: "POST",
           path,
-          handler: issuanceResponseHandler,
+          handler: offerResponseHandler,
           options: {
             bind: {
               identity,
@@ -110,7 +112,7 @@ async function offerResponseHandler(request: Request, h: ResponseToolkit) {
       {
         signedCredentials: h.context.creds,
       },
-      token
+      p.token
     );
 
   return false;

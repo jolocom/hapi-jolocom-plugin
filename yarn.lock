@@ -2355,14 +2355,15 @@ jolocom-registry-contract@^0.1.7:
     typescript "^2.6.2"
     web3 "1.0.0-beta.29"
 
-jolocom-sdk@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/jolocom-sdk/-/jolocom-sdk-0.4.1.tgz#78ba0953b9d6aef021008f03a26d488f5e47d7c4"
-  integrity sha512-HrI4xvz68+j//eOwQExzmJCB71cSSzuf3jVjVfsyUvfRXjO4WXyFWy1v6IcssNha52Z5J079h5pkQKC2DZ+DMQ==
+jolocom-sdk@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/jolocom-sdk/-/jolocom-sdk-0.5.2.tgz#43b2ab667428b4b63b62250f3acd5b7728a59104"
+  integrity sha512-rb+dZ308ILqkV0oVlayuMafRLKJf1vH5uOUI1EMBVHEk58RpM4uKb/d3TE9ZwrjBCmuhnmLHVotX3YoN7xUDKw==
   dependencies:
     assert "^2.0.0"
     bip39 "^3.0.2"
     browser-ipfs "^0.0.6"
+    cred-types-jolocom-core "^0.0.11"
     crypto-browserify "^3.12.0"
     ethereumjs-wallet "^0.6.0"
     events "^3.0.0"

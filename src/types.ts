@@ -2,6 +2,7 @@ import {
   JolocomSDK,
   CredentialRequirements,
   CredentialOffer,
+  CredentialDefinition,
 } from "jolocom-sdk";
 
 export type VerifierOptions = {
@@ -13,7 +14,7 @@ export type VerifierOptions = {
 export type IssuerOptions = {
   name?: string;
   offers: CredentialOffer[];
-  creds: CredentialDefinition[]:
+  creds: CredentialDefinition[];
 };
 
 export type SDKOptions = {
