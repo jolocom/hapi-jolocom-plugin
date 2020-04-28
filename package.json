@@ -5,6 +5,12 @@
   "author": "Jolocom",
   "license": "MIT",
   "private": false,
+  "main": "dist/index.js",
+  "files": ["dist/"],
+  "scripts": {
+    "build": "tsc -p .",
+    "prepare": "yarn build"
+  },
   "devDependencies": {
     "@types/hapi": "^18.0.3",
     "@types/node": "^13.9.8",
