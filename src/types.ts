@@ -17,8 +17,12 @@ export type IssuerOptions = {
   creds: CredentialDefinition[];
 };
 
-export type SDKOptions = {
+type IdentityData = {
   mnemonic: string;
+};
+
+export type SDKOptions = {
+  identityData?: IdentityData;
   verifierOptions?: VerifierOptions[];
   issuerOptions?: IssuerOptions[];
   prefix?: string;

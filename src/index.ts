@@ -1,5 +1,5 @@
 import { Plugin, Server, Request, ResponseToolkit, Lifecycle } from "hapi";
-import { JolocomSDK } from "jolocom-sdk";
+import { JolocomSDK, initStore } from "jolocom-sdk";
 import { SDKOptions, VerifierOptions } from "./types";
 
 export { SDKOptions };
@@ -11,7 +11,9 @@ export const sdkPlugin: Plugin<SDKOptions> = {
     node: "10",
   },
   register: async (server: Server, options: SDKOptions) => {
-    const identity = await JolocomSDK.fromMnemonic(options.mnemonic);
+    const identity = options.identityData
+      ? await JolocomSDK.fromMnemonic(options.identityData.mnemonic)
+      : await JolocomSDK.fromStore(initStore());
 
     // const prefix = options.prefix;
 
