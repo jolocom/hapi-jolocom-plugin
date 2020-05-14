@@ -4,7 +4,7 @@ import {
   CredentialOffer,
   CredentialDefinition,
   IJolocomSDKConfig,
-} from "jolocom-sdk";
+} from "@jolocom/sdk";
 
 export type VerifierOptions = {
   name?: string;

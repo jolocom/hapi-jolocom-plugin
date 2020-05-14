@@ -1,7 +1,7 @@
-import { Plugin, Server, Request, ResponseToolkit, Lifecycle } from "hapi";
-import { JolocomSDK, initStore } from "jolocom-sdk";
-import { SDKOptions, VerifierOptions } from "./types";
+import { Plugin, Server, Request, ResponseToolkit } from "@hapi/hapi";
 import * as WebSocket from "ws";
+import { JolocomSDK } from "@jolocom/sdk";
+import { SDKOptions } from "./types";
 
 export { SDKOptions };
 
@@ -12,11 +12,9 @@ export const sdkPlugin: Plugin<SDKOptions> = {
     node: "10",
   },
   register: async (server: Server, options: SDKOptions) => {
-    const identity = options.identityData
-      ? await JolocomSDK.fromMnemonic(options.identityData.mnemonic)
-      : await JolocomSDK.fromStore(initStore());
-
-    // const prefix = options.prefix;
+    // TODO
+    const sdk = new JolocomSDK(options.identityData!);
+    await sdk.init();
 
     if (options.verifierOptions)
       options.verifierOptions.map((opts) => {
@@ -27,7 +25,7 @@ export const sdkPlugin: Plugin<SDKOptions> = {
           handler: verificationRequestHandler,
           options: {
             bind: {
-              identity,
+              identity: sdk,
               requirements: opts.requirements,
             },
           },
@@ -38,7 +36,7 @@ export const sdkPlugin: Plugin<SDKOptions> = {
           handler: verificationResponseHandler,
           options: {
             bind: {
-              identity,
+              identity: sdk,
               requirements: opts.requirements,
             },
           },
@@ -54,7 +52,7 @@ export const sdkPlugin: Plugin<SDKOptions> = {
           handler: offerRequestHandler,
           options: {
             bind: {
-              identity,
+              identity: sdk,
               offers: opts.offers,
             },
           },
@@ -65,7 +63,7 @@ export const sdkPlugin: Plugin<SDKOptions> = {
           handler: offerResponseHandler,
           options: {
             bind: {
-              identity,
+              identity: sdk,
               offers: opts.offers,
             },
           },
