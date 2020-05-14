@@ -3,6 +3,7 @@ import {
   CredentialRequirements,
   CredentialOffer,
   CredentialDefinition,
+  IJolocomSDKConfig,
 } from "jolocom-sdk";
 
 export type VerifierOptions = {
@@ -17,14 +18,16 @@ export type IssuerOptions = {
   creds: CredentialDefinition[];
 };
 
-type IdentityData = {
-  mnemonic: string;
+export type EncryptionOptions = {
+  name: string;
+  toEnc: string;
 };
 
 export type SDKOptions = {
-  identityData?: IdentityData;
+  identityData?: IJolocomSDKConfig;
   verifierOptions?: VerifierOptions[];
   issuerOptions?: IssuerOptions[];
+  encrypterOptions?: EncryptionOptions[];
   prefix?: string;
 };
 

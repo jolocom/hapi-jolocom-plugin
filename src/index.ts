@@ -1,6 +1,7 @@
 import { Plugin, Server, Request, ResponseToolkit, Lifecycle } from "hapi";
 import { JolocomSDK, initStore } from "jolocom-sdk";
 import { SDKOptions, VerifierOptions } from "./types";
+import * as WebSocket from "ws";
 
 export { SDKOptions };
 
@@ -68,6 +69,26 @@ export const sdkPlugin: Plugin<SDKOptions> = {
               offers: opts.offers,
             },
           },
+        });
+      });
+
+    if (options.encrypterOptions)
+      options.encrypterOptions.map((opts) => {
+        const path = `ws//{opts.name}`;
+        const wss = new WebSocket.Server({ server: server.listener });
+        wss.on("connection", (ws) => {
+          ws.on("message", (message) => {
+            console.log(`received: ${message}`);
+          });
+          identity
+            .rpcEncRequest({
+              toEncrypt: "hello",
+              callbackURL: "path",
+            })
+            .then((t) => {
+              console.log(`sending req: ${t}`);
+              ws.send(t);
+            });
         });
       });
   },
