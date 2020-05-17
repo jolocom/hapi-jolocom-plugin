@@ -3,8 +3,7 @@ import {
   CredentialRequirements,
   CredentialOffer,
   CredentialDefinition,
-  IJolocomSDKConfig,
-} from "@jolocom/sdk";
+} from '@jolocom/sdk';
 
 export type VerifierOptions = {
   name?: string;
@@ -18,17 +17,8 @@ export type IssuerOptions = {
   creds: CredentialDefinition[];
 };
 
-type IdentityData = {
-  mnemonic: string;
-};
-
-export type SDKOptions = {
-  identityData?: IJolocomSDKConfig;
-  verifierOptions?: VerifierOptions[];
-  issuerOptions?: IssuerOptions[];
-  prefix?: string;
-};
-
-export type SDKContext = {
-  identity: JolocomSDK;
+export type PluginOptions = {
+  sdk: JolocomSDK,
+  verifierConfig?: VerifierOptions[];
+  issuerConfig?: IssuerOptions[];
 };

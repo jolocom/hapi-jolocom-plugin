@@ -1,49 +1,51 @@
-import { Plugin, Server, Request, ResponseToolkit } from "@hapi/hapi";
-import { JolocomSDK } from '@jolocom/sdk'
-import { SDKOptions } from "./types";
-export { SDKOptions };
+import { Plugin, Server, Request, ResponseToolkit } from '@hapi/hapi';
+import { PluginOptions } from "./types";
+import { JolocomSDK } from '@jolocom/sdk';
+export { PluginOptions };
 
-export const sdkPlugin: Plugin<SDKOptions> = {
-  name: "hapiJolocomSDK",
+export const issueAndVerifiyPlugin: Plugin<PluginOptions> = {
+  name: "hapiVerifierAndIssuer",
   version: "0.1.0",
   requirements: {
     node: "10",
   },
-  register: async (server: Server, options: SDKOptions) => {
+  register: async (server: Server, { sdk, verifierConfig, issuerConfig }: PluginOptions) => {
     // TODO
-    const sdk = new JolocomSDK(options.identityData!)
-    await sdk.init()
+    if (verifierConfig) {
+      debug(`${verifierConfig.length} verifier configuration sections found`)
 
-    if (options.verifierOptions)
-      options.verifierOptions.map((opts) => {
-        const path = `/${opts.name || opts.requirements[0].type[0]}/`;
+      console.log(server.route)
+      verifierConfig.map(({name, requirements}) => {
+        const path = `/${name}/${requirements[0].type[0]}/`;
+        debug(`verifier, registering route: ${path}, GET and POST`)
+
         server.route({
           method: "GET",
           path,
           handler: verificationRequestHandler,
           options: {
-            bind: {
-              identity: sdk,
-              requirements: opts.requirements,
-            },
+            bind: { sdk, requirements },
           },
         });
+
         server.route({
           method: "POST",
           path,
           handler: verificationResponseHandler,
           options: {
-            bind: {
-              identity: sdk,
-              requirements: opts.requirements,
-            },
+            bind: { sdk, requirements, },
           },
         });
       });
+    }
 
-    if (options.issuerOptions)
-      options.issuerOptions.map((opts) => {
-        const path = `/${opts.name || opts.offers[0].type[1]}`;
+    if (issuerConfig) {
+      debug(`${issuerConfig.length} issuer configuration sections found`)
+
+      issuerConfig.map(({name, offers}) => {
+        const path = `/${name || offers[0].type[1]}`;
+        debug(`issuer, registering route: ${path}, GET and POST`)
+
         server.route({
           method: "GET",
           path,
@@ -51,10 +53,11 @@ export const sdkPlugin: Plugin<SDKOptions> = {
           options: {
             bind: {
               identity: sdk,
-              offers: opts.offers,
+              offers: offers,
             },
           },
         });
+
         server.route({
           method: "POST",
           path,
@@ -62,23 +65,30 @@ export const sdkPlugin: Plugin<SDKOptions> = {
           options: {
             bind: {
               identity: sdk,
-              offers: opts.offers,
+              offers: offers,
             },
           },
         });
       });
+    }
   },
 };
+const authRequestToken = async (sdk: JolocomSDK, callbackURL: string) => {
+  return sdk.idw.create.interactionTokens.request.auth({
+    callbackURL
+  }, await sdk.bemw.keyChainLib.getPassword())
+}
 
 async function verificationRequestHandler(
   request: Request,
   h: ResponseToolkit
 ) {
-  const callbackUrl = request.url.href;
-  return await h.context.identity.credRequestToken({
-    callbackUrl,
+  const sdk: JolocomSDK = h.context.sdk
+
+  return sdk.({
+    callbackURL: request.url.href, // TODO Investigate, attack possible?
     credentialRequirements: h.context.requirements,
-  });
+  })
 }
 
 async function verificationResponseHandler(
@@ -116,3 +126,6 @@ async function offerResponseHandler(request: Request, h: ResponseToolkit) {
 
   return false;
 }
+
+
+const debug = (message: any) => process.env.DEBUG && console.log(message)
